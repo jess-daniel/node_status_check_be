@@ -1,0 +1,87 @@
+const axios = require('axios');
+const CronJobManager = require('cron-job-manager');
+const moment = require('moment');
+
+const Resource = require('../resources/resourcesModel');
+const User = require('../users/usersModel');
+const sendMail = require('../utils/mail');
+
+// This file contains all the functions related to the cron jobs
+
+module.exports = {
+  addCronJob,
+  removeCronJob,
+  pauseCronJob,
+  updateCronJob,
+  cronJobExists,
+};
+
+// holds all the cron jobs for the app
+const manager = new CronJobManager();
+
+// adds a new cron job and watches resource status
+function addCronJob(key, url, resource_id, checkStatus, time = '*/30 * * * *') {
+  checkStatus(url, resource_id);
+  manager.add(
+    key,
+    time,
+    async () => {
+      try {
+        const res = await axios.get(url);
+        if (res.status === 200) {
+          console.log(`${url} is up and running`);
+          // update resource status to up/true
+          // TODO: update the lastChecked property
+          await Resource.update(
+            { status: true, lastCheck: moment().format() },
+            resource_id
+          );
+        }
+      } catch (error) {
+        // console.log(error);
+        // update resource status to down/false
+        // TODO: update the lastChecked property
+        const resource = await Resource.update(
+          { status: false, lastCheck: moment().format() },
+          resource_id
+        );
+        // send a text/email notification to the user that their resource is down
+        const user = await User.findByFilter({
+          id: resource.user_id,
+        });
+        // grab user name and email and pass to email function
+        sendMail(
+          user.email,
+          `${user.name}, resource ${resource.name} at ${resource.link} is down!`
+        );
+        console.log(`${user.name}, ${url} is down`);
+      }
+    },
+    { start: true }
+  );
+}
+
+// deletes a cron job from the app
+function removeCronJob(key) {
+  manager.deleteJob(key);
+  console.log(`${key} was removed from job list`);
+}
+
+// pause a cron job
+function pauseCronJob(key) {
+  manager.stop(key);
+}
+
+// update the schedule for a cron job
+function updateCronJob(key, time) {
+  manager.update(key, time);
+}
+
+// view a single cron job
+function cronJobExists(key) {
+  if (!manager.exists(key)) {
+    return false;
+  } else {
+    return true;
+  }
+}

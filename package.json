@@ -1,0 +1,32 @@
+{
+  "name": "check-status",
+  "version": "1.0.0",
+  "description": "A package that checks the status of online services",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "clean": "knex migrate:rollback --all && knex migrate:latest && knex seed:run"
+  },
+  "author": "Jess Daniel",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "cors": "^2.8.5",
+    "cron-job-manager": "^2.1.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-jwt": "^5.3.3",
+    "helmet": "^3.22.0",
+    "jwks-rsa": "^1.8.0",
+    "knex": "^0.21.1",
+    "moment": "^2.26.0",
+    "nodemailer": "^6.4.8",
+    "pg": "^8.2.1",
+    "uuid": "^8.1.0",
+    "validator": "^13.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
