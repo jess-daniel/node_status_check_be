@@ -10,7 +10,7 @@ exports.seed = function (knex) {
           name: 'google',
           link: 'https://google.com',
           status: null,
-          lastCheck: '2020-06-07T00:00:00.000Z',
+          lastCheck: null,
           user_id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
         },
         {
@@ -18,7 +18,7 @@ exports.seed = function (knex) {
           name: 'amazon',
           link: 'https://amazon.com',
           status: null,
-          lastCheck: '2020-06-07T00:00:00.000Z',
+          lastCheck: null,
           user_id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
         },
       ]);

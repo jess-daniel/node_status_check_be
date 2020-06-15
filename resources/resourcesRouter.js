@@ -1,5 +1,4 @@
 const { v4: uuidv4 } = require('uuid');
-// const setStatus = require('../cron');
 const router = require('express').Router();
 
 const {
@@ -66,9 +65,7 @@ router.post('/', validateResource(), (req, res, next) => {
         res.status(400).json('Something went wrong adding the resource');
       }
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 });
 
 // delete a resource and remove it's cron job

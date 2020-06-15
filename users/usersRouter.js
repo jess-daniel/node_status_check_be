@@ -6,6 +6,7 @@ const Users = require('./usersModel');
 // middlewares
 const validateUserId = require('./validateUserId');
 
+// get all users
 router.get('/', (req, res) => {
   Users.get().then((users) => {
     if (users.length === 0) {
@@ -16,11 +17,13 @@ router.get('/', (req, res) => {
   });
 });
 
+// get user by ID
 router.get('/:id', validateUserId, (req, res) => {
   const { user } = req;
   res.json(user);
 });
 
+// adds a new user if the user does not exist yet
 router.post('/', (req, res, next) => {
   const userData = req.body;
   const { email } = userData;

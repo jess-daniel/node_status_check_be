@@ -31,7 +31,6 @@ function addCronJob(key, url, resource_id, checkStatus, time = '*/30 * * * *') {
         if (res.status === 200) {
           console.log(`${url} is up and running`);
           // update resource status to up/true
-          // TODO: update the lastChecked property
           await Resource.update(
             { status: true, lastCheck: moment().format() },
             resource_id
@@ -40,7 +39,6 @@ function addCronJob(key, url, resource_id, checkStatus, time = '*/30 * * * *') {
       } catch (error) {
         // console.log(error);
         // update resource status to down/false
-        // TODO: update the lastChecked property
         const resource = await Resource.update(
           { status: false, lastCheck: moment().format() },
           resource_id
@@ -77,11 +75,7 @@ function updateCronJob(key, time) {
   manager.update(key, time);
 }
 
-// view a single cron job
+// see if a cron job exists
 function cronJobExists(key) {
-  if (!manager.exists(key)) {
-    return false;
-  } else {
-    return true;
-  }
+  return manager.exists(key);
 }
