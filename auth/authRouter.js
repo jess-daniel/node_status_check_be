@@ -11,6 +11,7 @@ router.post('/login', async (req, res, next) => {
       username,
       password,
       realm: 'Username-Password-Authentication',
+      audience: process.env.AUDIENCE,
     });
     console.log('userData', userData);
     res.json({ message: 'user signed in', userData });

@@ -18,8 +18,8 @@ server.use(express.json());
 
 // Routes
 server.use('/auth', authRouter);
-server.use('/api/resources', resourcesRouter);
-server.use('/api/users', usersRouter);
+server.use('/api/resources', jwtCheck, resourcesRouter);
+server.use('/api/users', jwtCheck, usersRouter);
 
 // Sanity Check
 server.use('/', (req, res) => {
