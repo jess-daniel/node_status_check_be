@@ -6,6 +6,7 @@ const cors = require('cors');
 const jwtCheck = require('../auth/jwtCheck');
 const resourcesRouter = require('../resources/resourcesRouter');
 const usersRouter = require('../users/usersRouter');
+const authRouter = require('../auth/authRouter');
 const errorHandler = require('../middlewares/errorHandler');
 
 const server = express();
@@ -16,6 +17,7 @@ server.use(helmet());
 server.use(express.json());
 
 // Routes
+server.use('/auth', authRouter);
 server.use('/api/resources', resourcesRouter);
 server.use('/api/users', usersRouter);
 
