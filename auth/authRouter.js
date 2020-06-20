@@ -23,7 +23,7 @@ router.post('/login', async (req, res, next) => {
 // adds a new user if the user does not exist yet
 router.post('/register', async (req, res, next) => {
   try {
-    const { username, email, password, name } = req.body;
+    const { username, email, password } = req.body;
 
     const user = await User.findByFilter({ email });
 
@@ -38,7 +38,7 @@ router.post('/register', async (req, res, next) => {
       if (Object.keys(createdUser).length === 0) {
         return res.status(400).json({ message: 'the user was not created' });
       }
-      const newUser = await User.add({ name, email, id: uuidv4() });
+      const newUser = await User.add({ username, email, id: uuidv4() });
       if (newUser) {
         res.status(201).json(newUser);
       } else {
