@@ -32,7 +32,7 @@ function addCronJob(key, url, resource_id, checkStatus, time = '*/30 * * * *') {
           console.log(`${url} is up and running`);
           // update resource status to up/true
           await Resource.update(
-            { status: true, lastCheck: moment().format() },
+            { status: true, last_check: moment().format() },
             resource_id
           );
         }
@@ -40,7 +40,7 @@ function addCronJob(key, url, resource_id, checkStatus, time = '*/30 * * * *') {
         // console.log(error);
         // update resource status to down/false
         const resource = await Resource.update(
-          { status: false, lastCheck: moment().format() },
+          { status: false, last_check: moment().format() },
           resource_id
         );
         // send a text/email notification to the user that their resource is down

@@ -10,13 +10,13 @@ module.exports = async (url, resource_id) => {
       console.log(`${url} is up and running`);
       // update resource status to up/true
       await Resource.update(
-        { status: true, lastCheck: moment().format() },
+        { status: true, last_check: moment().format() },
         resource_id
       );
     } else {
       // update resource status to down/false
       const resource = await Resource.update(
-        { status: false, lastCheck: moment().format() },
+        { status: false, last_check: moment().format() },
         resource_id
       );
 

@@ -10,6 +10,7 @@ const {
 
 const checkStatus = require('../utils/checkStatus');
 const Resource = require('./resourcesModel');
+const User = require('../users/usersModel');
 
 // middlewares
 const validateUuid = require('./validateUuid');
@@ -24,6 +25,27 @@ router.get('/', (req, res, next) => {
       } else {
         res.status(404).json({ message: 'No resources could be found' });
       }
+    })
+    .catch(next);
+});
+
+// get a user's resources
+router.post('/user', (req, res, next) => {
+  const { email } = req.body;
+
+  User.findByFilter({ email })
+    .then((user) => {
+      Resource.resourcesByUser(user.id)
+        .then((resources) => {
+          if (resources.length > 0) {
+            res.json(resources);
+          } else {
+            res.status(404).json({
+              message: 'No resources were found for this user',
+            });
+          }
+        })
+        .catch(next);
     })
     .catch(next);
 });

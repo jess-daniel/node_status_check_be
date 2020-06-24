@@ -7,14 +7,22 @@ const User = require('../users/usersModel');
 router.post('/login', async (req, res, next) => {
   try {
     const { username, password } = req.body;
-    const userData = await auth0.oauth.passwordGrant({
-      username,
-      password,
-      realm: 'Username-Password-Authentication',
-      audience: process.env.AUDIENCE,
-    });
-    console.log('userData', userData);
-    res.json({ message: 'user signed in', userData });
+
+    const user = await User.findByFilter({ username });
+    console.log('user', user);
+    if (user === undefined) {
+      return res.status(400).json({ message: 'Could not log you in' });
+    } else {
+      const userData = await auth0.oauth.passwordGrant({
+        username,
+        password,
+        realm: 'Username-Password-Authentication',
+        audience: process.env.AUDIENCE,
+        scope: 'openid',
+      });
+      console.log('userData', userData);
+      res.json({ message: 'user signed in', userData });
+    }
   } catch (error) {
     next(error);
   }

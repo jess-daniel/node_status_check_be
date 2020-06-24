@@ -8,7 +8,7 @@ const validateUuid = (req, res, next) => {
     return res.status(400).json({ messgae: `${id} is not a valid UUID` });
   }
 
-  Resource.findById(id)
+  Resource.findByFilter({ id })
     .then((resource) => {
       if (resource) {
         req.resource = resource;

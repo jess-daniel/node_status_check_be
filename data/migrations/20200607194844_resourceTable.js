@@ -4,7 +4,7 @@ exports.up = function (knex) {
     tbl.string('name', 255).notNullable();
     tbl.string('link', 500).notNullable();
     tbl.boolean('status');
-    tbl.timestamp('lastCheck', { precision: 6 });
+    tbl.timestamp('last_check', { precision: 6 });
     tbl
       .uuid('user_id')
       .notNullable()
