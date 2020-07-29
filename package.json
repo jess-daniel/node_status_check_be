@@ -11,7 +11,7 @@
   "author": "Jess Daniel",
   "license": "MIT",
   "dependencies": {
-    "auth0": "^2.26.0",
+    "auth0": "^2.27.1",
     "axios": "^0.19.2",
     "cors": "^2.8.5",
     "cron-job-manager": "^2.1.2",
