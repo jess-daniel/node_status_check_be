@@ -1,36 +1,36 @@
-const { v4: uuidv4 } = require('uuid');
-const router = require('express').Router();
+const { v4: uuidv4 } = require("uuid");
+const router = require("express").Router();
 
 const {
   addCronJob,
   removeCronJob,
   cronJobExists,
   updateCronJob,
-} = require('../cron');
+} = require("../cron");
 
-const checkStatus = require('../utils/checkStatus');
-const Resource = require('./resourcesModel');
-const User = require('../users/usersModel');
+const checkStatus = require("../utils/checkStatus");
+const Resource = require("./resourcesModel");
+const User = require("../users/usersModel");
 
 // middlewares
-const validateUuid = require('./validateUuid');
-const validateResource = require('./validateResource');
+const validateUuid = require("./validateUuid");
+const validateResource = require("./validateResource");
 
 // get a list of resources
-router.get('/', (req, res, next) => {
+router.get("/", (req, res, next) => {
   Resource.get()
     .then((resources) => {
       if (resources.length !== 0) {
         res.json(resources);
       } else {
-        res.status(404).json({ message: 'No resources could be found' });
+        res.status(404).json({ message: "No resources could be found" });
       }
     })
     .catch(next);
 });
 
 // get a user's resources
-router.post('/user', (req, res, next) => {
+router.post("/user", (req, res, next) => {
   const { email } = req.body;
 
   User.findByFilter({ email })
@@ -41,7 +41,7 @@ router.post('/user', (req, res, next) => {
             res.json(resources);
           } else {
             res.status(404).json({
-              message: 'No resources were found for this user',
+              message: "No resources were found for this user",
             });
           }
         })
@@ -50,14 +50,34 @@ router.post('/user', (req, res, next) => {
     .catch(next);
 });
 
+// get a single resource by name for user
+router.post("/resource", (req, res) => {
+  const { email } = req.body;
+  const { resource_name } = req.body;
+
+  User.findByFilter(email)
+    .then((user) => {
+      Resource.resourceByName(user.id, resource_name)
+        .then((resource) => {
+          if (resource) {
+            res.status(200).json(resource);
+          } else {
+            res.status(400).json({ message: "resource couldn't be found" });
+          }
+        })
+        .catch(next);
+    })
+    .catch(next);
+});
+
 // get a single resource by ID
-router.get('/:id', validateUuid, (req, res) => {
+router.get("/:id", validateUuid, (req, res) => {
   const { resource } = req;
   res.json(resource);
 });
 
 // get the status of the resource's cron job
-router.get('/:id/job', validateUuid, (req, res) => {
+router.get("/:id/job", validateUuid, (req, res) => {
   const { resource } = req;
   const value = cronJobExists(resource.name);
   if (!value) {
@@ -74,7 +94,7 @@ router.get('/:id/job', validateUuid, (req, res) => {
 });
 
 // add a new resource and create a cron job
-router.post('/', validateResource(), (req, res, next) => {
+router.post("/", validateResource(), (req, res, next) => {
   const { body } = req;
 
   Resource.add({ ...body, id: uuidv4() })
@@ -84,14 +104,14 @@ router.post('/', validateResource(), (req, res, next) => {
         addCronJob(resource.name, resource.link, resource.id, checkStatus);
         res.json(resource);
       } else {
-        res.status(400).json('Something went wrong adding the resource');
+        res.status(400).json("Something went wrong adding the resource");
       }
     })
     .catch(next);
 });
 
 // delete a resource and remove it's cron job
-router.delete('/:id', validateUuid, (req, res, next) => {
+router.delete("/:id", validateUuid, (req, res, next) => {
   const { id } = req.params;
   const { resource } = req;
 
@@ -106,7 +126,7 @@ router.delete('/:id', validateUuid, (req, res, next) => {
 });
 
 // update a resource
-router.put('/:id', validateUuid, (req, res) => {
+router.put("/:id", validateUuid, (req, res) => {
   const { id } = req.params;
   const { body } = req;
 
@@ -118,18 +138,18 @@ router.put('/:id', validateUuid, (req, res) => {
 });
 
 // update a resource's cron job
-router.put('/:id/job', validateUuid, (req, res) => {
+router.put("/:id/job", validateUuid, (req, res) => {
   const { resource } = req;
   const { body } = req;
   if (!body.time) {
     return res
       .status(400)
-      .json({ message: 'You must include a new time for the cron job' });
+      .json({ message: "You must include a new time for the cron job" });
   }
 
   updateCronJob(resource.name, body.time);
 
-  res.json({ message: 'The cron job was updated successfully', resource });
+  res.json({ message: "The cron job was updated successfully", resource });
 });
 
 module.exports = router;
