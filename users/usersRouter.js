@@ -21,7 +21,6 @@ router.get("/", (req, res) => {
 // get auth0 user profile
 router.post("/auth-profile", (req, res, next) => {
   const { accessToken } = req.body;
-  console.log(accessToken);
   auth0
     .getProfile(accessToken)
     .then((profile) => {
@@ -42,7 +41,7 @@ router.get("/:id", validateUserId, (req, res) => {
 });
 
 // verify the user's auth0 email
-router.get("/verify-email", async (req, res, next) => {
+router.post("/verify-email", async (req, res, next) => {
   try {
     // auth0 user id
     const { user_id } = req.body;
