@@ -21,7 +21,10 @@ router.post("/login", async (req, res, next) => {
         scope: "openid",
       });
       console.log("userData", userData);
-      res.json({ message: "user signed in", userData });
+      res.json({
+        message: "user signed in",
+        userData: { userData, user },
+      });
     }
   } catch (error) {
     next(error);
