@@ -8,6 +8,7 @@ const resourcesRouter = require("../resources/resourcesRouter");
 const usersRouter = require("../users/usersRouter");
 const authRouter = require("../auth/authRouter");
 const logsRouter = require("../logsResource/logsRouter");
+const testsRouter = require("../tests/testsRouter");
 const errorHandler = require("../middlewares/errorHandler");
 
 const server = express();
@@ -22,6 +23,7 @@ server.use("/auth", authRouter);
 server.use("/api/resources", jwtCheck, resourcesRouter);
 server.use("/api/users", jwtCheck, usersRouter);
 server.use("/api/logs", jwtCheck, logsRouter);
+server.use("/api/tests", jwtCheck, testsRouter);
 
 // Sanity Check
 server.use("/", (req, res) => {

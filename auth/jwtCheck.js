@@ -1,5 +1,5 @@
-const jwt = require('express-jwt');
-const jwks = require('jwks-rsa');
+const jwt = require("express-jwt");
+const jwks = require("jwks-rsa");
 
 const ISSUER = process.env.ISSUER;
 
@@ -12,7 +12,7 @@ const jwtCheck = jwt({
   }),
   audience: process.env.AUDIENCE,
   issuer: ISSUER,
-  algorithm: ['RS256'],
+  algorithm: ["RS256"],
 });
 
 module.exports = jwtCheck;

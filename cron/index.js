@@ -1,4 +1,4 @@
-const axios = require("axios");
+const axios = require("axios").default;
 const CronJobManager = require("cron-job-manager");
 const moment = require("moment");
 const { v4: uuidv4 } = require("uuid");
@@ -20,6 +20,8 @@ module.exports = {
 
 // holds all the cron jobs for the app
 const manager = new CronJobManager();
+
+// TODO: create cron job function for tests that gets test data from DB and checks against HTTP response
 
 // adds a new cron job and watches resource status
 function addCronJob(key, url, resource_id, checkStatus, time = "*/30 * * * *") {
