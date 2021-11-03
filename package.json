@@ -25,7 +25,7 @@
     "nodemailer": "^6.4.8",
     "pg": "^8.2.1",
     "uuid": "^8.1.0",
-    "validator": "^13.0.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
